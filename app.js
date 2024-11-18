@@ -37,14 +37,6 @@ app.use(express.static( path.join( __dirname, 'public' ) ) );
 
 var env = process.env.NODE_ENV || 'development'
 
-if (env == 'production') {
-  var consumer_key = process.env.CONSUMER_KEY,
-      consumer_secret = process.env.CONSUMER_SECRET,
-      bearer_token = process.env.BEARER_TOKEN;
-} else {
-  //
-}
-
 app.get("/", function(req, res) {
   res.render('index.html');
 });
