@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}{{handle}}'s Post Milestone{% endblock %}
+
+{% block header_content %}
+<div class="milestone-header">
+  <h1>{{ handle }}’s Post Milestone</h1>
+</div>
+
+<div class="milestone">
+  <span>{{ postDifference | formatNumber }}</span>
+  posts to reach your {{ nextMilestone | formatNumber }} post milestone
+</div>
+{% endblock %}
+
+{% block content %}
+<p>Your {{ (ageYears + 1) | formatOrdinal }} anniversary is in {{ nextAnniversary | formatNumber }}.</p>
+
+<p>You will need to post at least {% if postTimes == 1 %} once {% else %} {{ postTimes | formatNumber }} times
+  {% endif %} a day to reach your milestone by then.</p>
+
+<p>You've posted {{ postCount | formatNumber }} times. An average of {{ averagePosts | formatNumber }} posts a day.</p>
+{% endblock %}

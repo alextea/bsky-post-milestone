@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}Oops there was a problem{% endblock %}
+
+{% block header_content %}
+<h1>Oops there was a problem</h1>
+{% endblock %}
+
+{% block content %}
+  <p>{{ error }}</p>
+
+  <form class="" action="/info" method="get" id="form-get-info">
+    <label for="input-username">
+      Twitter username
+      <input type="text" name="username" value="" id="input-username">
+    </label>
+
+    <button type="submit">Get milestone</button>
+  </form>
+{% endblock %}
+
+{% block scripts %}{% include "includes/_form-script.html" %}{% endblock %}

@@ -1,0 +1,27 @@
+{
+  "name": "post-milestone",
+  "version": "0.1.0",
+  "description": "Tells you how many bluesky posts you need to reach a target",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf public/css && mkdir -p public/css",
+    "watch": "npm run clean && nodemon app.js",
+    "start": "node app"
+  },
+  "author": "@alex_tea",
+  "license": "ISC",
+  "dependencies": {
+    "@atproto/api": "^0.13.16",
+    "body-parser": "^1.15.2",
+    "express": "^4.21.1",
+    "moment": "^2.17.1",
+    "nodemon": "^3.1.7",
+    "nunjucks": "^3.0.0",
+    "sass": "^1.81.0"
+  },
+  "nodemonConfig": {
+    "verbose": "true",
+    "ext": "*.scss, *.html"
+  }
+}

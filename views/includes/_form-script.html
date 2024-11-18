@@ -1,0 +1,8 @@
+<script type="text/javascript">
+$(function() {
+  $('#form-get-info').on('submit', function(e) {
+    e.preventDefault();
+    window.location = '/info/'+this[0].value;
+  });
+});
+</script>

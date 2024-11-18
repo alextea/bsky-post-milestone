@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://use.typekit.net/npq8ggs.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="header-content">
+      {% block header_content %}{% endblock %}
+      </div>
+    </header>
+    <article>
+      <div class="article-content">
+      {% block content %}{% endblock %}
+      </div>
+    </article>
+    <footer>
+      <div class="footer-content">
+      {% include "includes/_footer.html" %}
+      </div>
+    </footer>
+  </main>
+  {% block scripts %}{% endblock %}
+  {% include "includes/_analytics.html" %}
+</body>
+</html>

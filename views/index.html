@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Post Milestone{% endblock %}
+
+{% block header_content %}
+<h1>Post Milestone</h1>
+
+<p>Discover your next Post Milestone on Bluesky, view stats on your posts and how often you’ll need to post to reach
+  your milestone by your next anniversary.</p>
+{% endblock %}
+
+{% block content %}
+<p>Enter your Bluesky handle below to find out when your next Post Milestone is.</p>
+
+<form class="" action="/info" method="get" id="form-get-info">
+  <label for="input-handle">
+    Bluesky handle
+    <input type="text" name="handle" value="" id="input-handle">
+  </label>
+
+  <button type="submit">Get milestone</button>
+</form>
+{% endblock %}
+
+{% block scripts %}{% include "includes/_form-script.html" %}{% endblock %}

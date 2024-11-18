@@ -1,0 +1,126 @@
+@use 'toolkit/conditionals';
+
+$yellow: #ffc800;
+$black: #0b0900;
+
+$max-width: 600px;
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: "justus-pro";
+  font-size: 1em;
+  color: $black;
+
+  @include conditionals.media($min-width: 420px) {
+    font-size: 1.5em;
+  }
+}
+
+main {
+  width: 100%;
+  display: block;
+}
+
+header {
+  width: 100%;
+  background-color: $yellow;
+}
+
+.header-content {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 5vh 10vw;
+}
+
+article {
+  width: 100%;
+}
+
+.article-content {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 3vh 10vw;
+}
+
+footer {
+  width: 100%;
+}
+
+.footer-content {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 10vw 2vw;
+
+  p {
+    border-top: 2px solid #999;
+    color: #999;
+    font-size: 1em;
+    padding-top: 0.5em;
+  }
+}
+
+a {
+  color: $black;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+}
+
+input {
+  display: block;
+  font-size: 20px;
+  border: 2px solid #999;
+  padding: 10px;
+  margin-top: 0.5em;
+}
+
+button {
+  font-family: "justus-pro";
+  font-size: 1em;
+  padding: 5px 10px;
+  background-color: $yellow;
+  border: 0;
+  border-radius: 5px;
+
+  &:before {
+    // display: block;
+    content: "▶︎";
+    padding-right: 5px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.milestone-header {
+  border-bottom: 3px solid $black;
+
+  h1 {
+    font-size: 1em;
+    margin: 0 0 0.2em 0;
+  }
+}
+
+.milestone {
+  font-weight: 700;
+  font-size: 2em;
+
+  span {
+    font-size: 20vw;
+    display: block;
+  }
+
+  @include conditionals.media($min-width: 740px) {
+    span {
+      font-size: 4em;
+    }
+  }
+}
