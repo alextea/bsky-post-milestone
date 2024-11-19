@@ -58,9 +58,10 @@ app.get('/info(/:handle)?', async function(req, res) {
     service: 'https://public.api.bsky.app'
   })
   const params = { actor: req.params.handle };
-  const response = await bsky.getProfile(params);
-  
-  console.log(response)
+  const response = await bsky.getProfile(params).catch((err) => {
+    console.error(err)
+    return err
+  });
 
   if (response.success) {
     const profile = response.data
@@ -122,8 +123,7 @@ app.get('/info(/:handle)?', async function(req, res) {
 
     res.render('info.html', data);
   } else {
-    // console.log(error);
-    res.render('error.html', { error: response.error });
+    res.render('error.html', response);
   }
 });
 
