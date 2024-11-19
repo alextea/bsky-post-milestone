@@ -1,22 +1,17 @@
 {% extends "layout.html" %}
 
-{% block title %}Oops there was a problem{% endblock %}
+{% set pageTitle %}There was a problem{% endset %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block header_content %}
-<h1>Oops there was a problem</h1>
+<h1>{{ pageTitle }}</h1>
 {% endblock %}
 
 {% block content %}
-  <p>{{ error }}</p>
-
-  <form class="" action="/info" method="get" id="form-get-info">
-    <label for="input-username">
-      Twitter username
-      <input type="text" name="username" value="" id="input-username">
-    </label>
-
-    <button type="submit">Get milestone</button>
-  </form>
+<p>Check the handle and try again.</p>
+<p>{{ status }}: {{ error }}</p>
+</form>
 {% endblock %}
 
 {% block scripts %}{% include "includes/_form-script.html" %}{% endblock %}

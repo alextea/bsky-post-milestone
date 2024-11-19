@@ -1,15 +1,17 @@
 {% extends "layout.html" %}
 
-{% block title %}{{handle}}'s Post Milestone{% endblock %}
+{% set pageTitle %}{{handle}}'s post milestone{% endset %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block header_content %}
 <div class="milestone-header">
-  <h1>{{ handle }}’s Post Milestone</h1>
+  <h1>{{ pageTitle }}</h1>
 </div>
 
 <div class="milestone">
   <span>{{ postDifference | formatNumber }}</span>
-  posts to reach your {{ nextMilestone | formatNumber }} post milestone
+  posts to reach your {{ nextMilestone | formatNumber }} posts milestone
 </div>
 {% endblock %}
 
