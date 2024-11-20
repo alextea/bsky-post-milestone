@@ -5,13 +5,13 @@ import moment from 'moment';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { compileCss } from './compileCss.js';
+import { AtpAgent } from '@atproto/api';
+import { body, validationResult } from 'express-validator';
 
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-import { AtpAgent } from '@atproto/api';
 
 // Set up App
 nunjucks.configure(__dirname + '/views/', {
@@ -37,11 +37,30 @@ app.use(express.static( path.join( __dirname, 'public' ) ) );
 
 var env = process.env.NODE_ENV || 'development'
 
-app.get("/", function(req, res) {
+app.get("/", (req, res) => {
   res.render('index.html');
 });
 
-app.get('/info(/:handle)?', async function(req, res) {
+app.post('/',
+  body('handle')
+    .trim()
+    .notEmpty().withMessage("Handle cannot be blank")
+    .escape()
+    .customSanitizer((value) => {
+      return (value.startsWith('@')) ? value.substring(1) : value
+    })
+    .isURL({ require_protocol: false, allow_fragments: false, allow_query_components: false })
+    .withMessage("Handle is not correct format"),
+  (req, res) => {
+    const result = validationResult(req)
+    if (result.isEmpty()) {
+      res.redirect(`/info/${req.body.handle}`)
+    } else {
+      console.log(result.array({ onlyFirstError: true }))
+      res.render('index.html', { handle: req.body.handle, errors: result.array() })
+    }
+})
+
   if (req.params.handle == undefined) {
     if (req.query.handle != undefined) {
       res.redirect('/info/'+req.query.handle);
