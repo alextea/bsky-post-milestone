@@ -10,7 +10,7 @@
 
 {% block content %}
 <p>Check the handle and try again.</p>
-<p>{{ status }}: {{ error }}</p>
+<p>{% if status %}{{ status }}: {% endif %}{{ error }}</p>
 </form>
 {% endblock %}
 

@@ -14,14 +14,19 @@
 {% block content %}
 <p>Enter your Bluesky handle below to find out when your next post milestone is.</p>
 
-<form class="" action="/info" method="get" id="form-get-info">
-  <label for="input-handle">
-    Bluesky handle
-    <input type="text" name="handle" value="" id="input-handle">
-  </label>
+<div class="form-group{% if errors %} form-error{% endif %}">
+  <form class="" action="/" method="post" id="form-handle">
+    <label for="input-handle">Bluesky handle</label>
 
-  <button type="submit">Get milestone</button>
-</form>
+    {% if errors %}
+    <div class="error-message">{{ errors[0].msg }}</div>
+    {% endif %}
+
+    <input type="text" name="handle" value="{{ handle }}" id="input-handle">
+
+    <button type="submit">Get milestone</button>
+  </form>
+</div>
 {% endblock %}
 
 {% block scripts %}{% include "includes/_form-script.html" %}{% endblock %}

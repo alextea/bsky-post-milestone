@@ -75,6 +75,7 @@ label {
 
 input {
   display: block;
+  font-family: "justus-pro";
   font-size: 20px;
   border: 2px solid #999;
   padding: 10px;
@@ -83,7 +84,8 @@ input {
 
 button {
   font-family: "justus-pro";
-  font-size: 1em;
+  font-size: 20px;
+  margin-top: 0.5em;
   padding: 5px 10px;
   background-color: $yellow;
   border: 0;
@@ -98,6 +100,15 @@ button {
   &:hover {
     cursor: pointer;
   }
+}
+
+.form-group.form-error {
+  border-left: 5px solid red;
+  padding-left: 15px;
+}
+
+.error-message {
+  color: red;
 }
 
 .milestone-header {
