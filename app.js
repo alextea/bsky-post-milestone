@@ -61,6 +61,8 @@ app.post('/',
     }
 })
 
+app.get('/info(/:handle)?', async (req, res) => {
+
   if (req.params.handle == undefined) {
     if (req.query.handle != undefined) {
       res.redirect('/info/'+req.query.handle);
@@ -76,6 +78,7 @@ app.post('/',
   const bsky = new AtpAgent({
     service: 'https://public.api.bsky.app'
   })
+
   const params = { actor: req.params.handle };
   const response = await bsky.getProfile(params).catch((err) => {
     console.error(err)
@@ -146,7 +149,7 @@ app.post('/',
   }
 });
 
-var getNextOccurance = function(date) {
+var getNextOccurance = (date) => {
   var now = moment();
   var input = moment(date);
   var output = moment(input).year(now.year());
@@ -167,7 +170,7 @@ var getNextOccurance = function(date) {
   return output;
 }
 
-var getDateDifference = function(date1, date2) {
+var getDateDifference = (date1, date2) => {
   var date1 = moment(date1), date2 = moment(date2);
 
   var years = date1.diff(date2, 'year');
@@ -217,7 +220,7 @@ var getDateDifference = function(date1, date2) {
   return string;
 }
 
-const getNextMilestone = function(n, y=0) {
+const getNextMilestone = (n, y=0) => {
   const x = String(n).length;
   if (y==0) {
     y = "1";
@@ -233,11 +236,11 @@ const getNextMilestone = function(n, y=0) {
 
 var nunjucksEnv = new nunjucks.Environment();
 
-nunjucksEnv.addFilter('formatNumber', function(n) {
+nunjucksEnv.addFilter('formatNumber', (n) => {
   return n.toLocaleString();
 });
 
-nunjucksEnv.addFilter('formatOrdinal', function(n) {
+nunjucksEnv.addFilter('formatOrdinal', (n) => {
   var ord = "";
   if (n == 1) {
     ord = "st";
