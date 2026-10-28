@@ -10,12 +10,13 @@
 </div>
 
 <div class="milestone">
-  <span>{{ postDifference | formatNumber }}</span>
-  posts to reach your {{ nextMilestone | formatNumber }} posts milestone
+  <span>{{ postCount | formatNumber }}</span>
 </div>
 {% endblock %}
 
 {% block content %}
+<p>You are {{ postDifference | formatNumber }} posts from your {{ nextMilestone | formatNumber }} posts milestone.</p>
+
 <p>Your {{ (ageYears + 1) | formatOrdinal }} anniversary is in {{ nextAnniversary | formatNumber }}.</p>
 
 <p>You will need to post at least {% if postTimes == 1 %} once {% else %} {{ postTimes | formatNumber }} times
