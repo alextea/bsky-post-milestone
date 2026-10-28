@@ -61,6 +61,53 @@ app.post('/',
     }
 })
 
+const bsky = new AtpAgent({
+  service: 'https://public.api.bsky.app'
+})
+
+const getProfileStats = async (handle) => {
+  const response = await bsky.getProfile({ actor: handle });
+  const profile = response.data;
+
+  const now = moment().startOf('day');
+  const date_created = moment(profile.createdAt).startOf('day');
+
+  const age = getDateDifference(now, date_created);
+  const ageDays = Math.max(now.diff(date_created, 'days'), 1);
+  const ageYears = now.diff(date_created, 'years');
+  const isAnniversary = ageYears > 0 && date_created.month() == now.month() && date_created.date() == now.date();
+  const nextAnniversary = getNextOccurance(date_created);
+  const nextAnniversaryString = getDateDifference(now, nextAnniversary);
+  const anniversaryDays = nextAnniversary.diff(now, 'days');
+
+  const postCount = profile.postsCount;
+  const averagePosts = (postCount / ageDays).toFixed(2);
+
+  const lastMilestone = getLastMilestone(postCount);
+  const nextMilestone = getNextMilestone(postCount + 1);
+  const postDifference = nextMilestone - postCount;
+  const postTimes = Math.ceil(postDifference / anniversaryDays);
+
+  return {
+    did: profile.did,
+    name: profile.displayName,
+    handle: profile.handle,
+    avatar: profile.avatar,
+    createdAt: profile.createdAt,
+    age: age,
+    ageYears: ageYears,
+    isAnniversary: isAnniversary,
+    nextAnniversary: nextAnniversaryString,
+    anniversaryDays: anniversaryDays,
+    postCount: postCount,
+    averagePosts: averagePosts,
+    lastMilestone: lastMilestone,
+    nextMilestone: nextMilestone,
+    postDifference: postDifference,
+    postTimes: postTimes
+  }
+}
+
 app.get('/info{/:handle}', async (req, res) => {
 
   if (req.params.handle == undefined) {
@@ -75,77 +122,22 @@ app.get('/info{/:handle}', async (req, res) => {
     }
   }
 
-  const bsky = new AtpAgent({
-    service: 'https://public.api.bsky.app'
-  })
-
-  const params = { actor: req.params.handle };
-  const response = await bsky.getProfile(params).catch((err) => {
-    console.error(err)
-    return err
-  });
-
-  if (response.success) {
-    const profile = response.data
-    /* 
-    data: {
-      did: 'did:plc:wez2ivc3yh75q3ejlas7kcqv',
-      handle: 'alextorrance.co.uk',
-      displayName: 'Alex Torrance',
-      avatar: 'https://cdn.bsky.app/img/avatar/plain/did:plc:wez2ivc3yh75q3ejlas7kcqv/bafkreih2rxfwejxicl5hx4y5iyy4objin2n7acxzvsawssjm6gjjchqddq@jpeg',
-      associated: {
-        lists: 0,
-        feedgens: 0,
-        starterPacks: 0,
-        labeler: false,
-        chat: [Object]
-      },
-      labels: [],
-      createdAt: '2023-09-02T20:50:08.224Z',
-      description: 'The Idiot',
-      indexedAt: '2024-01-20T05:46:21.753Z',
-      banner: 'https://cdn.bsky.app/img/banner/plain/did:plc:wez2ivc3yh75q3ejlas7kcqv/bafkreih2rxfwejxicl5hx4y5iyy4objin2n7acxzvsawssjm6gjjchqddq@jpeg',
-      followersCount: 365,
-      followsCount: 380,
-      postsCount: 283
-    },
-    */
-
-    const now = moment().startOf('day');
-    const date_created = moment(profile.createdAt).startOf('day');
-
-    const age = getDateDifference(now, date_created);
-    const ageDays = Math.max(now.diff(date_created, 'days'), 1);
-    const ageYears = now.diff(date_created, 'years');
-    const nextAnniversary = getNextOccurance(date_created);
-    const nextAnniversaryString = getDateDifference(now, nextAnniversary);
-    const anniversaryDays = nextAnniversary.diff(now, 'days');
-
-    const postCount = profile.postsCount;
-    const averagePosts = (postCount / ageDays).toFixed(2);
-
-    const nextMilestone = getNextMilestone(postCount + 1);
-    const postDifference = nextMilestone - postCount;
-    const postTimes = Math.ceil(postDifference / anniversaryDays);
-
-    const data = {
-      name: profile.displayName,
-      handle: profile.handle,
-      age: age,
-      ageYears: ageYears,
-      nextAnniversary: nextAnniversaryString,
-      postCount: postCount,
-      averagePosts: averagePosts,
-      nextMilestone: nextMilestone,
-      postDifference: postDifference,
-      postTimes: postTimes
-    }
-
+  try {
+    const data = await getProfileStats(req.params.handle);
     console.log(data)
-
     res.render('info.html', data);
-  } else {
-    res.render('error.html', response);
+  } catch (err) {
+    console.error(err)
+    res.render('error.html', err);
+  }
+});
+
+app.get('/api/info/:handle', async (req, res) => {
+  try {
+    res.json(await getProfileStats(req.params.handle));
+  } catch (err) {
+    console.error(err)
+    res.status(err.status || 500).json({ error: err.error || 'Error', message: err.message });
   }
 });
 
@@ -223,6 +215,11 @@ const getMilestoneStep = (n) => {
 const getNextMilestone = (n) => {
   const y = getMilestoneStep(n);
   return Math.ceil(n/y) * y;
+}
+
+const getLastMilestone = (n) => {
+  const y = getMilestoneStep(n);
+  return Math.floor(n/y) * y;
 }
 
 var nunjucksEnv = new nunjucks.Environment();
