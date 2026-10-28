@@ -135,3 +135,53 @@ button {
     }
   }
 }
+
+// Share images are screenshotted at 1200×630
+.social-share {
+
+  header {
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    background-color: $yellow;
+  }
+
+  .header-content {
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8vw;
+  }
+
+  .milestone span {
+    font-size: 4em;
+  }
+
+  .article-content {
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8vw;
+  }
+
+  .footer-content {
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8vw;
+    padding-top: 2vw;
+
+    p {
+      border-top: 2px solid #999;
+      color: #999;
+      font-size: 1em;
+      padding-top: 0.5em;
+    }
+  }
+
+}
+
+.social-share-footer {
+  font-size: 0.8em;
+  margin: 1.5em 0 0;
+}

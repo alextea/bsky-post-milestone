@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width">
 </head>
-<body>
+<body{% block body_attributes %}{% endblock %}>
   <main>
     <header>
       <div class="header-content">
@@ -24,7 +24,9 @@
     </article>
     <footer>
       <div class="footer-content">
-      {% include "includes/_footer.html" %}
+      {% block footer %}
+        {% include "includes/_footer.html" %}
+      {% endblock %}
       </div>
     </footer>
   </main>

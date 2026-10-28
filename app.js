@@ -37,6 +37,11 @@ app.use(express.static( path.join( __dirname, 'public' ) ) );
 
 var env = process.env.NODE_ENV || 'development'
 
+app.use((req, res, next) => {
+  res.locals.siteHost = req.get('host');
+  next();
+});
+
 app.get("/", (req, res) => {
   res.render('index.html');
 });
@@ -60,6 +65,8 @@ app.post('/',
       res.render('index.html', { handle: req.body.handle, errors: result.array() })
     }
 })
+
+const shareTypes = ['milestone', 'progress', 'anniversary'];
 
 const bsky = new AtpAgent({
   service: 'https://public.api.bsky.app'
@@ -143,6 +150,23 @@ app.get('/api/info/:handle', async (req, res) => {
 
 app.get('/social-share/:milestone', (req, res) => {
   res.render('social-share.html', { milestone: req.params.milestone })
+})
+
+app.get('/social-share/:handle/:type', async (req, res) => {
+  if (!shareTypes.includes(req.params.type)) {
+    res.status(404).render('error.html', { error: "Unknown share type" });
+    return;
+  }
+
+  try {
+    const data = await getProfileStats(req.params.handle);
+    // The bot passes the milestone it is celebrating, in case the user has posted since
+    const milestone = parseInt(req.query.milestone) || data.lastMilestone;
+    res.render('social-share.html', { ...data, type: req.params.type, milestone: milestone });
+  } catch (err) {
+    console.error(err)
+    res.status(err.status || 500).render('error.html', err);
+  }
 })
 
 // Returns the next occurrence of the date's day and month, after today
@@ -242,6 +266,9 @@ nunjucksEnv.addFilter('formatOrdinal', (n) => {
 
   return n+ord;
 });
+
+// The bot account's handle, shown on pages and share images when set
+nunjucksEnv.addGlobal('botHandle', process.env.BOT_HANDLE);
 
 nunjucksEnv.express(app);
 

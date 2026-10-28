@@ -1,15 +1,46 @@
 {% extends "layout.html" %}
 
-{% set pageTitle %}{{ milestone | formatNumber }} post milestone{% endset %}
+{% if type == "anniversary" %}
+  {% set pageTitle %}{{ handle }} has been on Bluesky for {{ ageYears }} year{% if ageYears != 1 %}s{% endif %}
+  {% endset %}
+{% elif type == "progress" %}
+  {% set pageTitle %}{{ handle }} is {{ postDifference | formatNumber }} posts from {{ nextMilestone | formatNumber }}{% endset %}
+{% else %}
+  {% set pageTitle %}{{ milestone | formatNumber }} post milestone{% endset %}
+{% endif %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
+{% block body_attributes %} class="social-share"{% endblock %}
+
 {% block header_content %}
-<div class="milestone">
-  <span>{{ milestone | formatNumber }}</span>
-  posts
-</div>
+  {% if handle %}
+  <div class="milestone-header">
+    <h1>@{{ handle }}</h1>
+  </div>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
+
+{% if type == "anniversary" %}
+  <div class="milestone">
+    <span>{{ ageYears }} year{% if ageYears != 1 %}s{% endif %}</span>
+    on Bluesky, with {{ postCount | formatNumber }} posts
+  </div>
+{% elif type == "progress" %}
+  <div class="milestone">
+    <span>{{ postCount | formatNumber }}</span>
+    posts, {{ postDifference | formatNumber }} to go until {{ nextMilestone | formatNumber }}
+  </div>
+{% else %}
+  <div class="milestone">
+    <span>{{ milestone | formatNumber }}</span>
+    posts
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+  <p class="social-share-footer">{{ siteHost }}{% if botHandle %} · follow @{{ botHandle }}{% endif %}</p>
 {% endblock %}
