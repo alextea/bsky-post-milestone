@@ -28,4 +28,7 @@
   {% endif %} a day to reach your milestone by then.</p>
 
 <p>You've posted {{ postCount | formatNumber }} times. An average of {{ averagePosts | formatNumber }} posts a day.</p>
+{% if botHandle %}
+<p class="bot-promo">Follow <a href="https://bsky.app/profile/{{ botHandle }}">@{{ botHandle }}</a> on Bluesky to get updates when you reach a milestone.</p>
+{% endif %}
 {% endblock %}
