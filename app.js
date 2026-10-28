@@ -149,6 +149,10 @@ app.get('/info{/:handle}', async (req, res) => {
   }
 });
 
+app.get('/social-share/:milestone', (req, res) => {
+  res.render('social-share.html', { milestone: req.params.milestone })
+})
+
 var getNextOccurance = (date) => {
   var now = moment();
   var input = moment(date);

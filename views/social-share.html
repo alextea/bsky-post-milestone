@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% set pageTitle %}{{ milestone | formatNumber }} post milestone{% endset %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block header_content %}
+<div class="milestone">
+  <span>{{ milestone | formatNumber }}</span>
+  posts
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
