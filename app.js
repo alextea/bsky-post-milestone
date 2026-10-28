@@ -221,7 +221,7 @@ var getDateDifference = (date1, date2) => {
 }
 
 const getNextMilestone = (n, y=0) => {
-  const x = String(n).length;
+  const x = Math.min(String(n).length, 4);
   if (y==0) {
     y = "1";
     while (y.length < x) {
