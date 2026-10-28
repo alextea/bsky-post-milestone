@@ -111,20 +111,20 @@ app.get('/info{/:handle}', async (req, res) => {
     },
     */
 
-    const now = moment();
-    const date_created = moment(profile.createdAt);
+    const now = moment().startOf('day');
+    const date_created = moment(profile.createdAt).startOf('day');
 
     const age = getDateDifference(now, date_created);
-    const ageDays = now.diff(date_created, 'days');
+    const ageDays = Math.max(now.diff(date_created, 'days'), 1);
     const ageYears = now.diff(date_created, 'years');
     const nextAnniversary = getNextOccurance(date_created);
     const nextAnniversaryString = getDateDifference(now, nextAnniversary);
-    const anniversaryDays = Math.abs(now.diff(nextAnniversary, 'days'));
+    const anniversaryDays = nextAnniversary.diff(now, 'days');
 
     const postCount = profile.postsCount;
     const averagePosts = (postCount / ageDays).toFixed(2);
 
-    const nextMilestone = getNextMilestone(postCount);
+    const nextMilestone = getNextMilestone(postCount + 1);
     const postDifference = nextMilestone - postCount;
     const postTimes = Math.ceil(postDifference / anniversaryDays);
 
@@ -153,23 +153,14 @@ app.get('/social-share/:milestone', (req, res) => {
   res.render('social-share.html', { milestone: req.params.milestone })
 })
 
+// Returns the next occurrence of the date's day and month, after today
 var getNextOccurance = (date) => {
-  var now = moment();
-  var input = moment(date);
-  var output = moment(input).year(now.year());
+  var now = moment().startOf('day');
+  var output = moment(date).startOf('day').year(now.year());
 
-  if (input.month() < now.month()) {
+  if (output.isSameOrBefore(now)) {
     // next year
     output.year(now.year() + 1);
-  } else if (input.month() > now.month()) {
-    // do nothing
-  } else if (input.month() == now.month()) {
-    if (input.day() < now.day()) {
-      // next year
-      output.year(now.year() + 1);
-    } else if (input.day() >= now.day()) {
-      // do nothing
-    }
   }
   return output;
 }
@@ -224,18 +215,14 @@ var getDateDifference = (date1, date2) => {
   return string;
 }
 
-const getNextMilestone = (n, y=0) => {
-  const x = Math.min(String(n).length, 4);
-  if (y==0) {
-    y = "1";
-    while (y.length < x) {
-      y += "0";
-    }
-  }
+// Milestones are every power of ten up to 1,000, then every 1,000
+const getMilestoneStep = (n) => {
+  return Math.pow(10, Math.min(String(n).length, 4) - 1);
+}
 
-  const z = Math.ceil(n/y) * y;
-
-  return z;
+const getNextMilestone = (n) => {
+  const y = getMilestoneStep(n);
+  return Math.ceil(n/y) * y;
 }
 
 var nunjucksEnv = new nunjucks.Environment();
