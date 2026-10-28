@@ -4,6 +4,11 @@
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
+{% block meta %}
+<meta property="og:title" content="{{ pageTitle }}">
+<meta property="og:description" content="{{ postCount | formatNumber }} posts, {{ postDifference | formatNumber }} to go until {{ nextMilestone | formatNumber }}">
+{% endblock %}
+
 {% block header_content %}
 <div class="milestone-header">
   <h1>{{ pageTitle }}</h1>
