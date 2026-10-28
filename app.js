@@ -61,7 +61,7 @@ app.post('/',
     }
 })
 
-app.get('/info(/:handle)?', async (req, res) => {
+app.get('/info{/:handle}', async (req, res) => {
 
   if (req.params.handle == undefined) {
     if (req.query.handle != undefined) {
