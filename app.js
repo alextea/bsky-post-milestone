@@ -270,6 +270,10 @@ nunjucksEnv.addFilter('formatOrdinal', (n) => {
 // The bot account's handle, shown on pages and share images when set
 nunjucksEnv.addGlobal('botHandle', process.env.BOT_HANDLE);
 
+// Umami analytics, only included when both are set
+nunjucksEnv.addGlobal('umamiUrl', process.env.UMAMI_URL);
+nunjucksEnv.addGlobal('umamiWebsiteId', process.env.UMAMI_WEBSITE_ID);
+
 nunjucksEnv.express(app);
 
 var port = process.env.PORT || 8080;

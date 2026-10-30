@@ -44,3 +44,6 @@
 {% block footer %}
   <p class="social-share-footer">{{ siteHost }}{% if botHandle %} · follow @{{ botHandle }}{% endif %}</p>
 {% endblock %}
+
+{# Share pages are only loaded by the screenshot service, so don't count them #}
+{% block analytics %}{% endblock %}

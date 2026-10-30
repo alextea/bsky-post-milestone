@@ -35,6 +35,6 @@
     </footer>
   </main>
   {% block scripts %}{% endblock %}
-  {% include "includes/_analytics.html" %}
+  {% block analytics %}{% include "includes/_analytics.html" %}{% endblock %}
 </body>
 </html>
