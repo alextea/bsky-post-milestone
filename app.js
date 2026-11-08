@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { compileCss } from './compileCss.js';
 import { AtpAgent } from '@atproto/api';
 import { body, validationResult } from 'express-validator';
+import { getShareImage, screenshotsEnabled, screenshotSize } from './screenshot.js';
 
 const app = express();
 
@@ -37,8 +38,17 @@ app.use(express.static( path.join( __dirname, 'public' ) ) );
 
 var env = process.env.NODE_ENV || 'development'
 
+// Use the proxy's protocol in req.protocol, so generated links are https
+app.set('trust proxy', true);
+
+// Link cards and the screenshot service need absolute URLs
+const getSiteUrl = (req) => {
+  return (process.env.SITE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
+}
+
 app.use((req, res, next) => {
   res.locals.siteHost = req.get('host');
+  res.locals.siteUrl = getSiteUrl(req);
   next();
 });
 
@@ -67,6 +77,9 @@ app.post('/',
 })
 
 const shareTypes = ['milestone', 'progress', 'anniversary'];
+
+// Info page link cards show progress, or the anniversary on the day itself
+const getCardType = (stats) => stats.isAnniversary ? 'anniversary' : 'progress';
 
 const bsky = new AtpAgent({
   service: 'https://public.api.bsky.app'
@@ -132,10 +145,55 @@ app.get('/info{/:handle}', async (req, res) => {
   try {
     const data = await getProfileStats(req.params.handle);
     console.log(data)
-    res.render('info.html', data);
+
+    let cardImage = null;
+    if (screenshotsEnabled()) {
+      // Start making the image now, as people usually view the page before sharing it,
+      // so it's ready when Bluesky fetches the link card
+      getShareImage(res.locals.siteUrl, data, getCardType(data))
+        .catch(err => console.warn('Could not create link card image:', err.message));
+      cardImage = {
+        url: `${res.locals.siteUrl}/info/${data.handle}/card.jpg?posts=${data.postCount}`,
+        ...screenshotSize
+      };
+    }
+
+    res.render('info.html', { ...data, cardImage: cardImage });
   } catch (err) {
     console.error(err)
     res.render('error.html', err);
+  }
+});
+
+// Link card image for an info page
+app.get('/info/:handle/card.jpg', async (req, res) => {
+  if (!screenshotsEnabled()) {
+    res.sendStatus(404);
+    return;
+  }
+
+  let data;
+  try {
+    data = await getProfileStats(req.params.handle);
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(err.status || 500);
+    return;
+  }
+
+  try {
+    const imageUrl = await getShareImage(getSiteUrl(req), data, getCardType(data));
+    const image = await fetch(imageUrl);
+    if (!image.ok) {
+      throw new Error(`Could not fetch image ${imageUrl}: ${image.status}`);
+    }
+
+    res.set('Content-Type', image.headers.get('content-type') || 'image/jpeg');
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.send(Buffer.from(await image.arrayBuffer()));
+  } catch (err) {
+    console.warn('Could not serve link card image:', err.message);
+    res.sendStatus(503);
   }
 });
 
