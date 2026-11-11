@@ -126,7 +126,7 @@ button {
 
   span {
     font-size: 20vw;
-    display: block;
+    display: inline-block;
   }
 
   @include conditionals.media($min-width: 740px) {
@@ -143,12 +143,22 @@ button {
 
 // Share images are screenshotted at 1200×630
 .social-share {
+  main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
   header {
-    height: 20vh;
     display: flex;
     align-items: center;
     background-color: $yellow;
+    padding: 4vh 0;
+    margin-bottom: 4vh;
+  }
+
+  footer {
+    margin-top: auto;
   }
 
   .header-content {
@@ -167,20 +177,21 @@ button {
     width: 100%;
     box-sizing: border-box;
     padding: 0 8vw;
+
+    font-size: 2em;
+    font-weight: 700;
   }
 
   .footer-content {
     max-width: none;
     width: 100%;
     box-sizing: border-box;
-    padding: 0 8vw;
-    padding-top: 2vw;
+    padding: 2vh 8vw 4vh;
 
     p {
       border-top: 2px solid #999;
       color: #999;
       font-size: 1em;
-      padding-top: 0.5em;
     }
   }
 

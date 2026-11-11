@@ -19,26 +19,26 @@
     <h1>@{{ handle }}</h1>
   </div>
   {% endif %}
+
+  <div class="milestone">
+    {% if type == "anniversary" %}
+      <span>{{ ageYears }} {{ "year" if ageYears == 1 else "years" }}</span>
+    {% elif type == "progress" %}
+      <span>{{ postCount | formatNumber }}</span> {{ "post" if postCount == 1 else "posts" }}
+    {% else %}
+      <span>{{ milestone | formatNumber }}</span> {{ "post" if milestone == 1 else "posts" }}
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block content %}
-
-{% if type == "anniversary" %}
-  <div class="milestone">
-    <span>{{ ageYears }} year{% if ageYears != 1 %}s{% endif %}</span>
-    on Bluesky, with {{ postCount | formatNumber }} posts
-  </div>
-{% elif type == "progress" %}
-  <div class="milestone">
-    <span>{{ postCount | formatNumber }}</span>
-    posts, {{ postDifference | formatNumber }} to go until {{ nextMilestone | formatNumber }}
-  </div>
-{% else %}
-  <div class="milestone">
-    <span>{{ milestone | formatNumber }}</span>
-    posts
-  </div>
-{% endif %}
+  {% if type == "anniversary" %}
+    you joined Bluesky on {{ createdAt | formatDate("dddd, D MMMM Y") }} and have made {{ postCount | formatNumber }} posts
+  {% elif type == "progress" %}
+    {{ postDifference | formatNumber }} {{ "post" if postDifference == 1 else "posts" }} to go until you reach your next milestone of {{ nextMilestone | formatNumber }} {{ "post" if nextMilestone == 1 else "posts" }}
+  {% else %}
+    in {{ age }}
+  {% endif %}
 {% endblock %}
 
 {% block footer %}

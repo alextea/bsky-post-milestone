@@ -118,6 +118,7 @@ const getProfileStats = async (handle) => {
     ageYears: ageYears,
     isAnniversary: isAnniversary,
     nextAnniversary: nextAnniversaryString,
+    nextAnniversaryDate: nextAnniversary,
     anniversaryDays: anniversaryDays,
     postCount: postCount,
     averagePosts: averagePosts,
