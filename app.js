@@ -306,6 +306,10 @@ const getLastMilestone = (n) => {
 
 var nunjucksEnv = new nunjucks.Environment();
 
+nunjucksEnv.addFilter('formatDate', (date, format) => {
+  return moment(date).format(format);
+})
+
 nunjucksEnv.addFilter('formatNumber', (n) => {
   return n.toLocaleString();
 });
