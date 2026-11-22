@@ -207,6 +207,29 @@ app.get('/api/info/:handle', async (req, res) => {
   }
 });
 
+// Handle suggestions for the search box on the home page
+app.get('/api/search', async (req, res) => {
+  const q = String(req.query.q || '').trim().replace(/^@/, '');
+  if (!q) {
+    res.json([]);
+    return;
+  }
+
+  try {
+    const response = await bsky.app.bsky.actor.searchActorsTypeahead({ q: q, limit: 6 });
+    res.set('Cache-Control', 'public, max-age=60');
+    res.json(response.data.actors.map(actor => ({
+      handle: actor.handle,
+      displayName: actor.displayName,
+      avatar: actor.avatar
+    })));
+  } catch (err) {
+    // Search is only a convenience, so don't break the form
+    console.warn('Could not search handles:', err.message);
+    res.json([]);
+  }
+});
+
 app.get('/social-share/:milestone', (req, res) => {
   res.render('social-share.html', { milestone: req.params.milestone })
 })

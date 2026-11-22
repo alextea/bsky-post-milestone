@@ -101,6 +101,8 @@ input {
   border: 2px solid #999;
   padding: 10px;
   margin-top: 0.5em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 button {
@@ -121,6 +123,74 @@ button {
   &:hover {
     cursor: pointer;
   }
+}
+
+.handle-search {
+  position: relative;
+  max-width: 100%;
+}
+
+#handle-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  border: 2px solid #999;
+  border-top: 0;
+  max-height: 20em;
+  overflow-y: auto;
+
+  &[hidden] {
+    display: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+
+    &.active {
+      background-color: $yellow;
+    }
+  }
+}
+
+.suggestion-avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ddd;
+  object-fit: cover;
+}
+
+.suggestion-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 16px;
+}
+
+.suggestion-name {
+  font-weight: 700;
+}
+
+.suggestion-name,
+.suggestion-handle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestion-handle {
+  color: #666;
 }
 
 .form-group.form-error {
