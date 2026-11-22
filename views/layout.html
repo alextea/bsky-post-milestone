@@ -18,6 +18,9 @@
   <main>
     <header>
       <div class="header-content">
+      {% block site_nav %}
+      <nav class="site-nav"><a href="/">Back to home</a></nav>
+      {% endblock %}
       {% block header_content %}{% endblock %}
       </div>
     </header>

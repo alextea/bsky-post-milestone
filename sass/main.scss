@@ -36,6 +36,27 @@ header {
   padding: 5vh 10vw;
 }
 
+.site-nav {
+  font-size: 0.75em;
+  font-weight: 700;
+  margin-bottom: 1em;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &:before {
+    // display: block;
+    content: "◀";
+    padding-right: 5px;
+  }
+}
+
+
 article {
   width: 100%;
 }
