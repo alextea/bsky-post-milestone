@@ -32,6 +32,11 @@
     <button type="submit">Get milestone</button>
   </form>
 </div>
+
+{% if botHandle %}
+  <p class="bot-promo">Follow <a href="https://bsky.app/profile/{{ botHandle }}">@{{ botHandle }}</a> on Bluesky to get updates when you reach a milestone.</p>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}{% include "includes/_form-script.html" %}{% endblock %}
