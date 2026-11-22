@@ -3,6 +3,9 @@ package-lock.json
 
 # Secret
 secret.json
+.env
+.env.*
+!.env.example
 
 # Logs
 log

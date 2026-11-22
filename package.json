@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf public/css && mkdir -p public/css",
-    "watch": "npm run clean && nodemon app.js",
+    "watch": "npm run clean && nodemon --exec \"node --import dotenv/config\" app.js",
     "start": "node app"
   },
   "author": "@alex_tea",
@@ -24,5 +24,8 @@
   "nodemonConfig": {
     "verbose": "true",
     "ext": "*.scss, *.html"
+  },
+  "devDependencies": {
+    "dotenv": "^18.0.10"
   }
 }
