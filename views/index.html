@@ -14,11 +14,9 @@
 {% endblock %}
 
 {% block content %}
-<p>Enter your Bluesky handle below to find out when your next post milestone is.</p>
-
 <div class="form-group{% if errors %} form-error{% endif %}">
   <form class="" action="/" method="post" id="form-handle">
-    <label for="input-handle">Bluesky handle</label>
+    <label for="input-handle">Enter your Bluesky handle to find out when your next post milestone is</label>
 
     {% if errors %}
     <div class="error-message">{{ errors[0].msg }}</div>
